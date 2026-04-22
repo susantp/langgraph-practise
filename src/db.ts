@@ -19,30 +19,30 @@ const insertRelatedJoke = db.prepare(`
 `);
 
 export function saveRelatedJokes(topic: string, jokes: string[]) {
-    const insertMany = db.transaction((items: string[]) => {
-        for (const joke of items) {
-            if (joke.trim().length === 0) {
-                continue;
-            }
+	const insertMany = db.transaction((items: string[]) => {
+		for (const joke of items) {
+			if (joke.trim().length === 0) {
+				continue;
+			}
 
-            insertRelatedJoke.run(topic, joke);
-        }
-    });
+			insertRelatedJoke.run(topic, joke);
+		}
+	});
 
-    insertMany(jokes);
+	insertMany(jokes);
 }
 
 export function getAllRelatedJokes() {
-    return db
-        .query(`
+	return db
+		.query(`
       SELECT id, topic, joke, created_at
       FROM related_jokes
       ORDER BY id DESC
     `)
-        .all() as Array<{
-        id: number;
-        topic: string;
-        joke: string;
-        created_at: string;
-    }>;
+		.all() as Array<{
+		id: number;
+		topic: string;
+		joke: string;
+		created_at: string;
+	}>;
 }
